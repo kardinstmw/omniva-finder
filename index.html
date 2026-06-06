@@ -8,206 +8,89 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0f0f0f;
-    --bg2: #181818;
-    --bg3: #222222;
-    --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(255,255,255,0.18);
-    --text: #f0ede8;
-    --muted: #888;
-    --accent: #e8d5a0;
-    --accent2: #c4a96b;
-    --green: #6fcf97;
-    --green-bg: rgba(111,207,151,0.08);
-    --red: #eb5757;
-    --mono: 'DM Mono', monospace;
-    --sans: 'Syne', sans-serif;
-  }
-
-  html { background: var(--bg); color: var(--text); font-family: var(--sans); }
-
-  body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 3rem 1.25rem 4rem;
-    background:
-      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200,170,90,0.08) 0%, transparent 70%),
-      var(--bg);
-  }
-
-  .container { width: 100%; max-width: 640px; }
-
-  /* Header */
-  .header { margin-bottom: 2.5rem; text-align: center; }
-  .logo {
-    display: inline-flex; align-items: center; gap: 10px;
-    margin-bottom: 1.25rem;
-  }
-  .logo-icon {
-    width: 38px; height: 38px; border: 1.5px solid var(--accent2);
-    border-radius: 8px; display: flex; align-items: center; justify-content: center;
-  }
-  .logo-icon svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 1.8; }
-  .logo-text { font-size: 14px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-family: var(--mono); }
-  h1 { font-size: clamp(26px, 5vw, 36px); font-weight: 700; line-height: 1.15; color: var(--text); margin-bottom: 0.5rem; }
-  .subtitle { font-size: 14px; color: var(--muted); font-family: var(--mono); }
-
-  /* Search box */
-  .search-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.5rem;
-    margin-bottom: 1.25rem;
-  }
-  .search-label { font-size: 11px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.6rem; display: block; }
-  .search-row { display: flex; gap: 8px; }
-  .search-row input {
-    flex: 1;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 0 14px;
-    height: 46px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .search-row input::placeholder { color: var(--muted); }
-  .search-row input:focus { border-color: var(--accent2); }
-  .search-row button {
-    background: var(--accent);
-    color: #0f0f0f;
-    border: none;
-    border-radius: 9px;
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 0 20px;
-    height: 46px;
-    cursor: pointer;
-    white-space: nowrap;
-    letter-spacing: 0.04em;
-    transition: background 0.2s, transform 0.1s;
-    flex-shrink: 0;
-  }
-  .search-row button:hover { background: #f0e0b0; }
-  .search-row button:active { transform: scale(0.97); }
-  .search-row button:disabled { background: var(--bg3); color: var(--muted); cursor: not-allowed; transform: none; }
-
-  /* Status */
-  .status-line {
-    font-size: 12px; font-family: var(--mono); color: var(--muted);
-    padding: 0.5rem 0;
-    display: flex; align-items: center; gap: 8px;
-    min-height: 28px;
-  }
-  .status-line.error { color: var(--red); }
-  .status-line.ok { color: var(--green); }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
-  .spinner-ring {
-    width: 12px; height: 12px; border: 1.5px solid rgba(255,255,255,0.15);
-    border-top-color: var(--accent); border-radius: 50%;
-    animation: spin 0.7s linear infinite; flex-shrink: 0;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Country pill filter */
-  .filters {
-    display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap;
-  }
-  .filter-btn {
-    background: var(--bg2); border: 1px solid var(--border); border-radius: 999px;
-    color: var(--muted); font-family: var(--mono); font-size: 12px; padding: 4px 14px;
-    cursor: pointer; transition: all 0.18s; letter-spacing: 0.06em;
-  }
-  .filter-btn.active { background: var(--accent); color: #0f0f0f; border-color: var(--accent); font-weight: 500; }
-  .filter-btn:hover:not(.active) { border-color: var(--border-hover); color: var(--text); }
-
-  /* Cards */
-  .section-label {
-    font-size: 11px; font-family: var(--mono); color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.1em;
-    margin-bottom: 0.75rem;
-  }
-  .results { display: flex; flex-direction: column; gap: 8px; }
-  .result-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 0 14px;
-    align-items: start;
-    transition: border-color 0.18s;
-    text-decoration: none;
-    color: inherit;
-  }
-  .result-card:hover { border-color: var(--border-hover); }
-  .result-card.best {
-    border-color: rgba(200,170,90,0.35);
-    background: linear-gradient(135deg, rgba(200,170,90,0.04) 0%, var(--bg2) 60%);
-  }
-
-  .rank {
-    font-family: var(--mono); font-size: 12px; color: var(--muted);
-    padding-top: 2px;
-    min-width: 20px;
-  }
-  .rank.gold { color: var(--accent2); font-weight: 500; }
-
-  .card-body { min-width: 0; }
-  .card-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-addr { font-size: 12px; color: var(--muted); font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; }
-  .card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-  .tag {
-    font-size: 10px; font-family: var(--mono); padding: 2px 8px;
-    border-radius: 999px; letter-spacing: 0.05em; font-weight: 500;
-    border: 1px solid;
-  }
-  .tag-ee { color: #6fa8d4; border-color: rgba(111,168,212,0.3); background: rgba(111,168,212,0.06); }
-  .tag-lv { color: #d47e6f; border-color: rgba(212,126,111,0.3); background: rgba(212,126,111,0.06); }
-  .tag-lt { color: #7db87d; border-color: rgba(125,184,125,0.3); background: rgba(125,184,125,0.06); }
-  .tag-best { color: var(--accent2); border-color: rgba(200,170,90,0.3); background: rgba(200,170,90,0.06); }
-
-  .card-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-  .dist-val { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--text); white-space: nowrap; }
-  .dist-unit { font-size: 11px; color: var(--muted); }
-  .map-btn {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 11px; font-family: var(--mono); color: var(--accent2);
-    text-decoration: none; border: 1px solid rgba(200,170,90,0.25);
-    border-radius: 6px; padding: 4px 10px;
-    transition: border-color 0.15s, background 0.15s;
-    white-space: nowrap;
-  }
-  .map-btn:hover { border-color: var(--accent2); background: rgba(200,170,90,0.06); }
-  .map-btn svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-  /* Footer */
-  .footer { margin-top: 3rem; text-align: center; font-size: 11px; font-family: var(--mono); color: var(--muted); }
-  .footer span { color: rgba(255,255,255,0.2); }
-
-  @media (max-width: 480px) {
-    .result-card { grid-template-columns: auto 1fr; }
-    .card-right { display: none; }
-    .card-tags { margin-top: 2px; }
-    .card-name { white-space: normal; }
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;--bg2:#181818;--bg3:#222;
+  --border:rgba(255,255,255,.08);--border-h:rgba(255,255,255,.18);
+  --text:#f0ede8;--muted:#888;
+  --accent:#e8d5a0;--accent2:#c4a96b;
+  --green:#6fcf97;--red:#eb5757;
+  --mono:'DM Mono',monospace;--sans:'Syne',sans-serif;
+}
+html{background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding:3rem 1.25rem 4rem;
+  background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(200,170,90,.08) 0%,transparent 70%),var(--bg)}
+.wrap{width:100%;max-width:640px}
+.hdr{margin-bottom:2.5rem;text-align:center}
+.logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.logo-icon{width:38px;height:38px;border:1.5px solid var(--accent2);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:1.8}
+.logo-text{font-size:14px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-family:var(--mono)}
+h1{font-size:clamp(26px,5vw,36px);font-weight:700;line-height:1.15;margin-bottom:.5rem}
+.sub{font-size:14px;color:var(--muted);font-family:var(--mono)}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem}
+.slabel{font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;display:block}
+.srow{display:flex;gap:8px}
+.srow input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:9px;
+  color:var(--text);font-family:var(--mono);font-size:14px;padding:0 14px;height:46px;outline:none;transition:border-color .2s}
+.srow input::placeholder{color:var(--muted)}
+.srow input:focus{border-color:var(--accent2)}
+.srow button{background:var(--accent);color:#0f0f0f;border:none;border-radius:9px;
+  font-family:var(--sans);font-size:13px;font-weight:700;padding:0 20px;height:46px;
+  cursor:pointer;letter-spacing:.04em;transition:background .2s,transform .1s;flex-shrink:0}
+.srow button:hover{background:#f0e0b0}
+.srow button:active{transform:scale(.97)}
+.srow button:disabled{background:var(--bg3);color:var(--muted);cursor:not-allowed;transform:none}
+.status{font-size:12px;font-family:var(--mono);color:var(--muted);
+  padding:.5rem 0;display:flex;align-items:center;gap:8px;min-height:28px}
+.status.err{color:var(--red)}
+.status.ok{color:var(--green)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.ring{width:12px;height:12px;border:1.5px solid rgba(255,255,255,.15);
+  border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rlabel{font-size:11px;font-family:var(--mono);color:var(--muted);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem}
+.results{display:flex;flex-direction:column;gap:8px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:1rem 1.25rem;display:grid;grid-template-columns:24px 1fr auto;
+  gap:0 14px;align-items:start;transition:border-color .18s}
+.card:hover{border-color:var(--border-h)}
+.card.best{border-color:rgba(200,170,90,.35);
+  background:linear-gradient(135deg,rgba(200,170,90,.04) 0%,var(--bg2) 60%)}
+.rank{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:2px}
+.rank.gold{color:var(--accent2);font-weight:500}
+.cbody{min-width:0}
+.cname{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.caddr{font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:6px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:999px;
+  letter-spacing:.05em;font-weight:500;border:1px solid}
+.tag-ee{color:#6fa8d4;border-color:rgba(111,168,212,.3);background:rgba(111,168,212,.06)}
+.tag-lv{color:#d47e6f;border-color:rgba(212,126,111,.3);background:rgba(212,126,111,.06)}
+.tag-lt{color:#7db87d;border-color:rgba(125,184,125,.3);background:rgba(125,184,125,.06)}
+.tag-best{color:var(--accent2);border-color:rgba(200,170,90,.3);background:rgba(200,170,90,.06)}
+.cright{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.cdist{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--text);white-space:nowrap}
+.mapbtn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);
+  color:var(--accent2);text-decoration:none;border:1px solid rgba(200,170,90,.25);
+  border-radius:6px;padding:4px 10px;transition:border-color .15s,background .15s;white-space:nowrap}
+.mapbtn:hover{border-color:var(--accent2);background:rgba(200,170,90,.06)}
+footer{margin-top:3rem;text-align:center;font-size:11px;font-family:var(--mono);color:var(--muted)}
+footer s{text-decoration:none;color:rgba(255,255,255,.2)}
+@media(max-width:480px){
+  .card{grid-template-columns:24px 1fr}
+  .cright{display:none}
+  .cname{white-space:normal}
+}
 </style>
 </head>
 <body>
-<div class="container">
-
-  <header class="header">
+<div class="wrap">
+  <header class="hdr">
     <div class="logo">
       <div class="logo-icon">
         <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
@@ -215,202 +98,138 @@
       <span class="logo-text">Omniva Finder</span>
     </div>
     <h1>Ближайший постамат</h1>
-    <p class="subtitle">Эстония · Латвия · Литва</p>
+    <p class="sub">Эстония · Латвия · Литва</p>
   </header>
 
-  <div class="search-card">
-    <label class="search-label" for="addr-input">Адрес получателя</label>
-    <div class="search-row">
-      <input type="text" id="addr-input" placeholder="Пр. Tartu mnt 84, Tallinn" autocomplete="off" />
-      <button id="search-btn" onclick="doSearch()">Найти →</button>
+  <div class="scard">
+    <label class="slabel" for="ainput">Адрес получателя</label>
+    <div class="srow">
+      <input type="text" id="ainput" placeholder="Напр. Tartu mnt 84, Tallinn" autocomplete="off" />
+      <button id="sbtn" onclick="doSearch()">Найти →</button>
     </div>
-    <div class="status-line" id="status-line"></div>
+    <div class="status" id="st"></div>
   </div>
 
-  <div class="filters" id="filters" style="display:none">
-    <button class="filter-btn active" data-country="all" onclick="filterCountry('all',this)">Все страны</button>
-    <button class="filter-btn" data-country="EE" onclick="filterCountry('EE',this)">🇪🇪 Эстония</button>
-    <button class="filter-btn" data-country="LV" onclick="filterCountry('LV',this)">🇱🇻 Латвия</button>
-    <button class="filter-btn" data-country="LT" onclick="filterCountry('LT',this)">🇱🇹 Литва</button>
-  </div>
-
-  <div id="results-wrap" style="display:none">
-    <p class="section-label" id="section-label"></p>
+  <div id="rwrap" style="display:none">
+    <p class="rlabel" id="rlabel"></p>
     <div class="results" id="results"></div>
   </div>
 
-  <footer class="footer">
-    Данные: Omniva API <span>·</span> Геокодинг: OpenStreetMap Nominatim
-  </footer>
-
+  <footer>Данные: omniva.ee/locations.json <s>·</s> Геокодинг: OpenStreetMap Nominatim</footer>
 </div>
 
 <script>
-const OMNIVA_URLS = {
-  EE: 'https://api.omniva.eu/locations/terminal/list/country/ee/type/1',
-  LV: 'https://api.omniva.eu/locations/terminal/list/country/lv/type/1',
-  LT: 'https://api.omniva.eu/locations/terminal/list/country/lt/type/1',
-};
+// Официальный публичный JSON Omniva. Поля:
+// TYPE='0' — постамат | A0_NAME — страна | NAME — название
+// X_COORDINATE — долгота (lon) | Y_COORDINATE — широта (lat)
+// A5_NAME — улица | A7_NAME — номер дома | A3_NAME — город | A2_NAME — район
+const DATA = 'https://www.omniva.ee/locations.json';
+let terms = [], loaded = false;
 
-let allTerminals = [];
-let currentResults = [];
-let dataLoaded = false;
-
-// ── Status helpers ────────────────────────────────────────────────
-function setStatus(type, msg) {
-  const el = document.getElementById('status-line');
-  if (type === 'loading') {
-    el.className = 'status-line';
-    el.innerHTML = `<div class="spinner-ring"></div>${msg}`;
-  } else if (type === 'error') {
-    el.className = 'status-line error';
-    el.innerHTML = `<div class="dot"></div>${msg}`;
-  } else if (type === 'ok') {
-    el.className = 'status-line ok';
-    el.innerHTML = `<div class="dot"></div>${msg}`;
-  } else {
-    el.className = 'status-line';
-    el.innerHTML = msg;
-  }
+function st(type, msg) {
+  const el = document.getElementById('st');
+  if (type === 'l') { el.className='status'; el.innerHTML='<div class="ring"></div>'+msg; }
+  else if (type === 'e') { el.className='status err'; el.innerHTML='<div class="dot"></div>'+msg; }
+  else { el.className='status ok'; el.innerHTML='<div class="dot"></div>'+msg; }
 }
 
-// ── Load terminals ─────────────────────────────────────────────────
-async function loadTerminals() {
-  if (dataLoaded) return true;
-  setStatus('loading', 'Загружаем данные постаматов из трёх стран...');
+async function loadData() {
+  if (loaded) return true;
+  st('l','Загружаем список постаматов Omniva...');
   try {
-    const [ee, lv, lt] = await Promise.all(
-      Object.entries(OMNIVA_URLS).map(([country, url]) =>
-        fetch(url).then(r => r.json()).then(data =>
-          data.map(t => ({ ...t, _country: country }))
-        )
-      )
+    const r = await fetch(DATA);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    terms = data.filter(t =>
+      t.TYPE === '0' &&
+      t.X_COORDINATE && t.Y_COORDINATE &&
+      Math.abs(parseFloat(t.X_COORDINATE)) > 0.01 &&
+      Math.abs(parseFloat(t.Y_COORDINATE)) > 0.01 &&
+      ['EE','LV','LT'].includes(t.A0_NAME)
     );
-    allTerminals = [...ee, ...lv, ...lt].filter(t => t.latitude && t.longitude);
-    dataLoaded = true;
+    loaded = true;
     return true;
-  } catch (e) {
-    setStatus('error', 'Ошибка загрузки данных. Проверь интернет.');
+  } catch(e) {
+    st('e','Ошибка загрузки. Проверь интернет-соединение. ('+e.message+')');
     return false;
   }
 }
 
-// ── Haversine distance (metres) ────────────────────────────────────
-function haversine(lat1, lon1, lat2, lon2) {
-  const R = 6371000, toRad = x => x * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
-  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+function hav(lat1, lon1, lat2, lon2) {
+  const R=6371000, r=Math.PI/180;
+  const a=Math.sin((lat2-lat1)*r/2)**2+Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin((lon2-lon1)*r/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-function fmtDist(m) {
-  if (m < 1000) return { val: Math.round(m), unit: 'м' };
-  return { val: (m/1000).toFixed(1), unit: 'км' };
+function fmtD(m) {
+  return m < 1000 ? Math.round(m)+' м' : (m/1000).toFixed(1)+' км';
 }
 
-// ── Geocode via Nominatim ──────────────────────────────────────────
-async function geocode(address) {
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&countrycodes=ee,lv,lt&limit=1`;
-  const r = await fetch(url, { headers: { 'Accept-Language': 'ru,en' } });
-  const data = await r.json();
-  if (!data.length) return null;
-  return {
-    lat: parseFloat(data[0].lat),
-    lon: parseFloat(data[0].lon),
-    display: data[0].display_name,
-  };
+async function geocode(addr) {
+  const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=ee,lv,lt&q='+encodeURIComponent(addr);
+  const r = await fetch(url, {headers:{'Accept-Language':'ru,en','User-Agent':'OmnivaFinder/1.0'}});
+  const d = await r.json();
+  if (!d.length) return null;
+  return {lat:parseFloat(d[0].lat), lon:parseFloat(d[0].lon), name:d[0].display_name};
 }
 
-// ── Render cards ───────────────────────────────────────────────────
-function renderCards(list) {
-  const el = document.getElementById('results');
-  el.innerHTML = list.map((t, i) => {
-    const d = fmtDist(t._dist);
-    const mapUrl = `https://www.google.com/maps?q=${t.latitude},${t.longitude}`;
-    const addr = [t.ADDRESS, t.A2_NAME, t.A1_NAME].filter(Boolean).join(', ');
-    const isBest = i === 0;
-    const countryTag = `<span class="tag tag-${t._country.toLowerCase()}">${t._country}</span>`;
-    const bestTag = isBest ? `<span class="tag tag-best">★ ближайший</span>` : '';
-    return `
-    <div class="result-card ${isBest ? 'best' : ''}">
-      <div class="rank ${isBest ? 'gold' : ''}">${i+1}</div>
-      <div class="card-body">
-        <div class="card-name">${t.NAME || 'Постамат Omniva'}</div>
-        <div class="card-addr">${addr}</div>
-        <div class="card-tags">${countryTag}${bestTag}</div>
-      </div>
-      <div class="card-right">
-        <div><span class="dist-val">${d.val}</span> <span class="dist-unit">${d.unit}</span></div>
-        <a class="map-btn" href="${mapUrl}" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          Карта
-        </a>
-      </div>
-    </div>`;
-  }).join('');
+function mkCard(t, i) {
+  const lat = parseFloat(t.Y_COORDINATE), lon = parseFloat(t.X_COORDINATE);
+  const murl = 'https://www.google.com/maps?q='+lat+','+lon;
+  const parts = [t.A5_NAME, t.A7_NAME, t.A3_NAME||t.A2_NAME].filter(x=>x&&x.trim());
+  const addr = parts.join(' ').trim() || t.A2_NAME || '';
+  const ctry = (t.A0_NAME||'EE').toLowerCase();
+  const best = i === 0;
+  return '<div class="card'+(best?' best':'')+'">'+
+    '<div class="rank'+(best?' gold':'')+'">'+( i+1)+'</div>'+
+    '<div class="cbody">'+
+      '<div class="cname">'+(t.NAME||'Постамат Omniva')+'</div>'+
+      '<div class="caddr">'+addr+'</div>'+
+      '<div class="ctags">'+
+        '<span class="tag tag-'+ctry+'">'+(t.A0_NAME||'EE')+'</span>'+
+        (best?'<span class="tag tag-best">★ ближайший</span>':'')+
+      '</div>'+
+    '</div>'+
+    '<div class="cright">'+
+      '<div class="cdist">'+fmtD(t._d)+'</div>'+
+      '<a class="mapbtn" href="'+murl+'" target="_blank" rel="noopener">📍 Карта</a>'+
+    '</div></div>';
 }
 
-// ── Filter by country ──────────────────────────────────────────────
-function filterCountry(country, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const filtered = country === 'all' ? currentResults : currentResults.filter(t => t._country === country);
-  document.getElementById('section-label').textContent = `${filtered.length} постаматов`;
-  renderCards(filtered);
-}
-
-// ── Main search ────────────────────────────────────────────────────
 async function doSearch() {
-  const addr = document.getElementById('addr-input').value.trim();
+  const addr = document.getElementById('ainput').value.trim();
   if (!addr) return;
-
-  const btn = document.getElementById('search-btn');
+  const btn = document.getElementById('sbtn');
   btn.disabled = true;
-  document.getElementById('filters').style.display = 'none';
-  document.getElementById('results-wrap').style.display = 'none';
-  document.getElementById('results').innerHTML = '';
+  document.getElementById('rwrap').style.display = 'none';
 
-  const ok = await loadTerminals();
-  if (!ok) { btn.disabled = false; return; }
+  if (!await loadData()) { btn.disabled = false; return; }
 
-  setStatus('loading', 'Определяем адрес...');
-  const geo = await geocode(addr);
-  if (!geo) {
-    setStatus('error', 'Адрес не найден. Попробуй уточнить (добавь город или улицу).');
-    btn.disabled = false;
-    return;
-  }
+  st('l','Определяем координаты адреса...');
+  let g;
+  try { g = await geocode(addr); }
+  catch(e) { st('e','Ошибка геокодинга: '+e.message); btn.disabled=false; return; }
+  if (!g) { st('e','Адрес не найден. Попробуй уточнить — добавь город или страну.'); btn.disabled=false; return; }
 
-  setStatus('loading', 'Считаем расстояния...');
-  const withDist = allTerminals
-    .map(t => ({ ...t, _dist: haversine(geo.lat, geo.lon, parseFloat(t.latitude), parseFloat(t.longitude)) }))
-    .sort((a, b) => a._dist - b._dist)
+  const res = terms
+    .map(t => ({...t, _d: hav(g.lat, g.lon, parseFloat(t.Y_COORDINATE), parseFloat(t.X_COORDINATE))}))
+    .sort((a,b) => a._d - b._d)
     .slice(0, 10);
 
-  currentResults = withDist;
-
-  const shortAddr = geo.display.split(',').slice(0, 3).join(', ');
-  setStatus('ok', `Адрес: ${shortAddr}`);
-
-  document.getElementById('filters').style.display = 'flex';
-  document.getElementById('results-wrap').style.display = 'block';
-  document.getElementById('section-label').textContent = `${withDist.length} ближайших постаматов`;
-
-  // reset filter to "all"
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('[data-country="all"]').classList.add('active');
-
-  renderCards(withDist);
+  st('ok', g.name.split(',').slice(0,3).join(', '));
+  document.getElementById('rlabel').textContent = '10 ближайших постаматов';
+  document.getElementById('results').innerHTML = res.map(mkCard).join('');
+  document.getElementById('rwrap').style.display = 'block';
   btn.disabled = false;
 }
 
-// Enter key
-document.getElementById('addr-input').addEventListener('keydown', e => {
+document.getElementById('ainput').addEventListener('keydown', e => {
   if (e.key === 'Enter') doSearch();
 });
 
-// Pre-load data silently on page open
-loadTerminals().catch(() => {});
+// Предзагрузка при открытии страницы
+loadData().catch(() => {});
 </script>
 </body>
 </html>
+
